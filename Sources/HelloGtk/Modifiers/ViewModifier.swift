@@ -15,14 +15,6 @@ protocol WidgetViewModifier {
     func update(_ widget: Widget) -> Void
 }
 
-extension AnyColorBox.ResolvedValue {
-    var rgba: RGBA {
-        var gdkRGBA = GdkRGBA(red: red, green: green, blue: blue, alpha: opacity)
-        let color = withUnsafePointer(to: &gdkRGBA, RGBA.init)
-        return color
-    }
-}
-
 extension _BackgroundModifier: WidgetViewModifier where Background == Color {
     func create() -> Widget {
         let box = Box(orientation: .horizontal, spacing: 0)
@@ -33,6 +25,10 @@ extension _BackgroundModifier: WidgetViewModifier where Background == Color {
     func update(_ widget: Widget) -> Void {
         guard let box = widget as? Box else { return }
         let resolved = _ColorProxy(self.background).resolve(in: environment)
-        box.overrideBackgroundColor(state: .normal, color: resolved.rgba)
+        var gdkRGBA = GdkRGBA(red: resolved.red, green: resolved.green, blue: resolved.blue, alpha: resolved.opacity)
+        withUnsafePointer(to: &gdkRGBA) { color in
+            let rgba = RGBA(color)
+            box.overrideBackgroundColor(state: .normal, color: rgba)
+        }
     }
 }

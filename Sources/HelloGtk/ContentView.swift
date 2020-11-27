@@ -21,7 +21,7 @@ struct ContentView : View {
                     spacing -= 10
                 }
             }
-            Text("Hello, world 6!").bold().background(Color(red: 0.5, green: 0.3, blue: 0.6, opacity: 0.8))
+            Text("Hello, world 6!").background(Color(red: 0.5, green: 0.3, blue: 0.6, opacity: 1))
             VStack(spacing: spacing) {
                 Text("Hello, world 7!")
                 Text("Hello, world 8!")
