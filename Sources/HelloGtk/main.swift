@@ -1,12 +1,13 @@
 import Gtk
 
+// TODO: The renderer needs to be kept alive in order for the update loop
+// to work. There's probably a better way to do this.
+var renderer: WidgetRenderer?
+
 let status = Application.run(startupHandler: nil) { app in
-    let window = ApplicationWindowRef(application: app)
-    window.title = "Hello, world"
-    window.setDefaultSize(width: 320, height: 240)
-    let label = Label(str: "Hello, SwiftGtk")
-    window.add(widget: label)
-    window.showAll()
+    renderer = WidgetRenderer(ContentView(), application: app)
+    let window = renderer?.applicationWindow
+    window?.showAll()
 }
 
 guard let status = status else {
